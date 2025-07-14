@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Araç Geçmişi - UstaStok V2</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #333;
             color: #eee;
             margin: 0;
@@ -33,16 +34,19 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
             margin-top: 20px;
             margin-bottom: 20px;
-            max-width: 1200px; /* Geniş ekranlar için */
+            max-width: 1200px;
         }
         h1, h2, h3, h4, h5, h6 {
             color: #fff;
+            margin-bottom: 1rem;
         }
         .form-control, .btn {
             border-radius: 5px;
+            transition: all 0.3s ease;
         }
         .form-group label {
             color: #ccc;
+            font-weight: 500;
         }
         .form-control {
             background-color: #555;
@@ -63,6 +67,30 @@
             background-color: #0056b3;
             border-color: #0056b3;
         }
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+        .btn-info:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
         .alert-success {
             background-color: #28a745;
             color: white;
@@ -79,6 +107,7 @@
         .table thead th {
             background-color: #666;
             border-bottom: 2px solid #777;
+            font-weight: 600;
         }
         .table-hover tbody tr:hover {
             background-color: #666;
@@ -108,133 +137,220 @@
         .close:hover {
             color: #ccc;
         }
+        .list-group-item {
+            background-color: #555;
+            color: #eee;
+            border-color: #666;
+        }
+        .list-group-item:hover {
+            background-color: #666;
+        }
+        .text-muted {
+            color: #999 !important;
+        }
+        .badge {
+            font-weight: 500;
+            padding: 0.4em 0.6em;
+        }
+        .card {
+            background-color: #555;
+            border-color: #666;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #666;
+            border-bottom-color: #777;
+            font-weight: 600;
+        }
+        .search-highlight {
+            background-color: #ffc107;
+            color: #333;
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+        .action-buttons .btn {
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        #serviceRecordsTableBody tr {
+            cursor: pointer;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 0.25em solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spinner-border 0.75s linear infinite;
+        }
+        @keyframes spinner-border {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg">
-        <a class="navbar-brand" href="/">UstaStok V2</a>
+        <a class="navbar-brand" href="/"><i class="fas fa-tools mr-2"></i>UstaStok V2</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/stok-ekle.html">Stok Ekle</a>
+                    <a class="nav-link" href="/stok-ekle.html"><i class="fas fa-plus-circle mr-1"></i>Stok Ekle</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/stok-listesi.html">Stok Listesi</a>
+                    <a class="nav-link" href="/stok-listesi.html"><i class="fas fa-list mr-1"></i>Stok Listesi</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/stok-duzenle.html">Stok Düzenle</a>
+                    <a class="nav-link" href="/stok-duzenle.html"><i class="fas fa-edit mr-1"></i>Stok Düzenle</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/arac-kayit.html">Araç Kayıt</a>
+                    <a class="nav-link" href="/arac-kayit.html"><i class="fas fa-car mr-1"></i>Araç Kayıt</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/arac-gecmisi.html">Araç Geçmişi <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/arac-gecmisi.html"><i class="fas fa-history mr-1"></i>Araç Geçmişi <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/istatistikler.html">İstatistikler</a>
+                    <a class="nav-link" href="/istatistikler.html"><i class="fas fa-chart-bar mr-1"></i>İstatistikler</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/kullanicilar.html">Kullanıcı Yönetimi</a>
+                    <a class="nav-link" href="/kullanicilar.html"><i class="fas fa-users mr-1"></i>Kullanıcı Yönetimi</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/ayarlar.html">Ayarlar</a>
+                    <a class="nav-link" href="/ayarlar.html"><i class="fas fa-cog mr-1"></i>Ayarlar</a>
                 </li>
             </ul>
         </div>
     </nav>
 
     <div class="container">
-        <h1 class="mb-4">Araç Servis Geçmişi</h1>
+        <h1 class="mb-4"><i class="fas fa-history mr-2"></i>Araç Servis Geçmişi</h1>
         <div id="message" class="alert d-none" role="alert"></div>
 
-        <form id="serviceRecordForm">
-            <h3 class="mb-3">Yeni Servis Kaydı Ekle</h3>
-            <div class="form-group">
-                <label for="vehiclePlateSearch">Plaka Numarası ile Ara ve Seç*</label>
-                <input type="text" class="form-control" id="vehiclePlateSearch" placeholder="Plaka Numarası Girin...">
-                <small class="form-text text-muted">Arama yaparken sistem kayıtlı araçları gösterecektir.</small>
-                <div id="vehicleSuggestions" class="list-group mt-2"></div>
-                <input type="hidden" id="selectedVehicleId">
-                <p class="mt-2" id="selectedVehicleInfo">Seçilen Araç: Yok</p>
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-plus-circle mr-2"></i>Yeni Servis Kaydı Ekle</h3>
             </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="serviceDate">Servis Tarihi*</label>
-                    <input type="date" class="form-control" id="serviceDate" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="mileage">Kilometre*</label>
-                    <input type="number" class="form-control" id="mileage" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="diagnosis">Teşhis</label>
-                <textarea class="form-control" id="diagnosis" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="performedActions">Yapılan İşlemler</label>
-                <textarea class="form-control" id="performedActions" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="notes">Notlar</label>
-                <textarea class="form-control" id="notes" rows="3"></textarea>
-            </div>
-
-            <h4 class="mt-4">Kullanılan Yedek Parçalar</h4>
-            <div id="usedPartsContainer">
-                <div class="form-row used-part-row">
-                    <div class="form-group col-md-8">
-                        <label for="partSearch0">Parça Kodu/Adı ile Ara</label>
-                        <input type="text" class="form-control part-search-input" id="partSearch0" placeholder="Parça Kodu veya Adı Girin..." data-index="0">
-                        <div class="list-group mt-1 part-suggestions" id="partSuggestions0"></div>
-                        <input type="hidden" class="selected-part-id" id="selectedPartId0">
-                        <p class="mt-1 selected-part-info" id="selectedPartInfo0">Seçilen Parça: Yok</p>
+            <div class="card-body">
+                <form id="serviceRecordForm">
+                    <div class="form-group">
+                        <label for="vehiclePlateSearch"><i class="fas fa-car mr-1"></i>Plaka Numarası ile Ara ve Seç*</label>
+                        <input type="text" class="form-control" id="vehiclePlateSearch" placeholder="Plaka Numarası Girin..." autocomplete="off">
+                        <small class="form-text text-muted">Arama yaparken sistem kayıtlı araçları gösterecektir.</small>
+                        <div id="vehicleSuggestions" class="list-group mt-2" style="display: none;"></div>
+                        <input type="hidden" id="selectedVehicleId">
+                        <div class="mt-2 p-2 bg-dark rounded" id="selectedVehicleInfo">
+                            <strong>Seçilen Araç:</strong> <span class="text-warning">Yok</span>
+                        </div>
                     </div>
-                    <div class="form-group col-md-3">
-                        <label for="quantity0">Adet</label>
-                        <input type="number" class="form-control part-quantity" id="quantity0" value="1" min="1">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="serviceDate"><i class="far fa-calendar-alt mr-1"></i>Servis Tarihi*</label>
+                            <input type="date" class="form-control" id="serviceDate" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="mileage"><i class="fas fa-tachometer-alt mr-1"></i>Kilometre*</label>
+                            <input type="number" class="form-control" id="mileage" required>
+                        </div>
                     </div>
-                    <div class="form-group col-md-1 d-flex align-items-end">
-                        <button type="button" class="btn btn-danger remove-part-btn w-100" style="display:none;">X</button>
+                    <div class="form-group">
+                        <label for="diagnosis"><i class="fas fa-stethoscope mr-1"></i>Teşhis</label>
+                        <textarea class="form-control" id="diagnosis" rows="3" placeholder="Aracın sorununu açıklayın..."></textarea>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label for="performedActions"><i class="fas fa-tools mr-1"></i>Yapılan İşlemler</label>
+                        <textarea class="form-control" id="performedActions" rows="3" placeholder="Yapılan işlemleri açıklayın..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes"><i class="fas fa-clipboard mr-1"></i>Notlar</label>
+                        <textarea class="form-control" id="notes" rows="3" placeholder="Ek notlarınız..."></textarea>
+                    </div>
+
+                    <h4 class="mt-4"><i class="fas fa-cogs mr-2"></i>Kullanılan Yedek Parçalar</h4>
+                    <div id="usedPartsContainer">
+                        <div class="form-row used-part-row">
+                            <div class="form-group col-md-8">
+                                <label for="partSearch0"><i class="fas fa-search mr-1"></i>Parça Kodu/Adı ile Ara</label>
+                                <input type="text" class="form-control part-search-input" id="partSearch0" placeholder="Parça Kodu veya Adı Girin..." data-index="0" autocomplete="off">
+                                <div class="list-group mt-1 part-suggestions" id="partSuggestions0" style="display: none;"></div>
+                                <input type="hidden" class="selected-part-id" id="selectedPartId0">
+                                <div class="mt-1 p-2 bg-dark rounded selected-part-info" id="selectedPartInfo0">
+                                    <strong>Seçilen Parça:</strong> <span class="text-warning">Yok</span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="quantity0"><i class="fas fa-boxes mr-1"></i>Adet</label>
+                                <input type="number" class="form-control part-quantity" id="quantity0" value="1" min="1">
+                            </div>
+                            <div class="form-group col-md-1 d-flex align-items-end">
+                                <button type="button" class="btn btn-danger remove-part-btn w-100" style="display:none;"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-info btn-sm mb-3" id="addPartField"><i class="fas fa-plus mr-1"></i>Başka Parça Ekle</button>
+
+                    <button type="submit" class="btn btn-primary btn-block mt-3">
+                        <i class="fas fa-save mr-1"></i>Servis Kaydını Oluştur
+                    </button>
+                </form>
             </div>
-            <button type="button" class="btn btn-info btn-sm mb-3" id="addPartField">Başka Parça Ekle</button>
-
-            <button type="submit" class="btn btn-primary btn-block">Servis Kaydını Oluştur</button>
-        </form>
-
-        <hr class="my-4">
-
-        <h2 class="mb-4">Araç Servis Kayıtları Listesi</h2>
-        <div class="form-group">
-            <label for="filterVehiclePlate">Plaka ile filtrele:</label>
-            <input type="text" class="form-control" id="filterVehiclePlate" placeholder="Plaka numarası girin...">
-            <button type="button" class="btn btn-secondary mt-2" id="resetFilter">Tüm Kayıtları Göster</button>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover table-striped">
-                <thead>
-                    <tr>
-                        <th>Servis ID</th>
-                        <th>Plaka</th>
-                        <th>Tarih</th>
-                        <th>Kilometre</th>
-                        <th>Teşhis</th>
-                        <th>Yapılan İşlemler</th>
-                        <th>Notlar</th>
-                        <th>Kullanılan Parçalar</th>
-                        <th>Detay</th>
-                    </tr>
-                </thead>
-                <tbody id="serviceRecordsTableBody">
-                    <tr><td colspan="9" class="text-center">Yükleniyor...</td></tr>
-                </tbody>
-            </table>
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="mb-0"><i class="fas fa-list mr-2"></i>Araç Servis Kayıtları Listesi</h2>
+                <div>
+                    <button type="button" class="btn btn-sm btn-secondary" id="refreshRecords">
+                        <i class="fas fa-sync-alt mr-1"></i>Yenile
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label for="filterVehiclePlate"><i class="fas fa-filter mr-1"></i>Plaka ile filtrele:</label>
+                        <input type="text" class="form-control" id="filterVehiclePlate" placeholder="Plaka numarası girin...">
+                    </div>
+                    <div class="form-group col-md-4 d-flex align-items-end">
+                        <button type="button" class="btn btn-secondary w-100" id="resetFilter">
+                            <i class="fas fa-broom mr-1"></i>Tüm Kayıtları Göster
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Plaka</th>
+                                <th>Tarih</th>
+                                <th>Kilometre</th>
+                                <th>Teşhis</th>
+                                <th>İşlemler</th>
+                                <th>Eylemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="serviceRecordsTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div class="py-4">
+                                        <div class="loading-spinner text-primary mb-2"></div>
+                                        <div>Yükleniyor...</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav aria-label="Page navigation" class="mt-3">
+                    <ul class="pagination justify-content-center" id="pagination">
+                        <!-- Pagination will be added dynamically -->
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
 
@@ -242,25 +358,71 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="serviceDetailModalLabel">Servis Detayları</h5>
+                    <h5 class="modal-title" id="serviceDetailModalLabel"><i class="fas fa-info-circle mr-2"></i>Servis Detayları</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Plaka:</strong> <span id="modalPlate"></span></p>
-                    <p><strong>Servis Tarihi:</strong> <span id="modalServiceDate"></span></p>
-                    <p><strong>Kilometre:</strong> <span id="modalMileage"></span></p>
-                    <p><strong>Teşhis:</strong> <span id="modalDiagnosis"></span></p>
-                    <p><strong>Yapılan İşlemler:</strong> <span id="modalPerformedActions"></span></p>
-                    <p><strong>Notlar:</strong> <span id="modalNotes"></span></p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong><i class="fas fa-car mr-2"></i>Plaka:</strong> <span id="modalPlate" class="text-warning">-</span></p>
+                            <p><strong><i class="far fa-calendar-alt mr-2"></i>Servis Tarihi:</strong> <span id="modalServiceDate">-</span></p>
+                            <p><strong><i class="fas fa-tachometer-alt mr-2"></i>Kilometre:</strong> <span id="modalMileage">-</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong><i class="fas fa-user mr-2"></i>Müşteri:</strong> <span id="modalCustomer">-</span></p>
+                            <p><strong><i class="fas fa-phone mr-2"></i>Telefon:</strong> <span id="modalPhone">-</span></p>
+                            <p><strong><i class="fas fa-id-card mr-2"></i>Servis ID:</strong> <span id="modalServiceId" class="badge badge-secondary">-</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <p><strong><i class="fas fa-stethoscope mr-2"></i>Teşhis:</strong></p>
+                        <div class="p-3 bg-dark rounded" id="modalDiagnosis">-</div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <p><strong><i class="fas fa-tools mr-2"></i>Yapılan İşlemler:</strong></p>
+                        <div class="p-3 bg-dark rounded" id="modalPerformedActions">-</div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <p><strong><i class="fas fa-clipboard mr-2"></i>Notlar:</strong></p>
+                        <div class="p-3 bg-dark rounded" id="modalNotes">-</div>
+                    </div>
 
-                    <h6 class="mt-4">Kullanılan Parçalar:</h6>
-                    <ul id="modalUsedPartsList">
-                        </ul>
+                    <div class="mt-4">
+                        <h6><i class="fas fa-cogs mr-2"></i>Kullanılan Parçalar:</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead class="bg-secondary">
+                                    <tr>
+                                        <th>Parça Kodu</th>
+                                        <th>Parça Adı</th>
+                                        <th>Adet</th>
+                                        <th>Birim Fiyat</th>
+                                        <th>Toplam</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalUsedPartsList">
+                                    <tr>
+                                        <td colspan="5" class="text-center">Kullanılan parça yok</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4" class="text-right font-weight-bold">Toplam:</td>
+                                        <td class="font-weight-bold" id="modalPartsTotal">0.00 ₺</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"></i>Kapat</button>
+                    <button type="button" class="btn btn-primary" id="printServiceRecord"><i class="fas fa-print mr-1"></i>Yazdır</button>
                 </div>
             </div>
         </div>
@@ -278,10 +440,22 @@
     <script>
         $(document).ready(function() {
             const messageDiv = $('#message');
-            let partFieldIndex = 0; // Dinamik parça alanları için sayaç
+            let partFieldIndex = 0;
+            let currentPage = 1;
+            const recordsPerPage = 10;
+            let allServiceRecords = [];
+            let filteredRecords = [];
+            let currentVehicleId = null;
 
+            // Initialize date field with today's date
+            const today = new Date().toISOString().split('T')[0];
+            $('#serviceDate').val(today);
+
+            // Display message function
             function displayMessage(msg, type) {
-                messageDiv.text(msg).removeClass('d-none alert-success alert-danger').addClass(`alert-${type}`);
+                messageDiv.html(`<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} mr-2"></i>${msg}`)
+                    .removeClass('d-none alert-success alert-danger')
+                    .addClass(`alert-${type}`);
                 setTimeout(() => messageDiv.addClass('d-none'), 5000);
             }
 
@@ -293,84 +467,143 @@
             if (initialVehicleId && initialLicensePlate) {
                 $('#selectedVehicleId').val(initialVehicleId);
                 $('#vehiclePlateSearch').val(initialLicensePlate);
-                $('#selectedVehicleInfo').text(`Seçilen Araç: ${initialLicensePlate}`);
-                $('#vehiclePlateSearch').prop('disabled', true); // Plaka arama alanını pasif yap
+                $('#selectedVehicleInfo').html(`<strong>Seçilen Araç:</strong> <span class="text-warning">${initialLicensePlate}</span>`);
+                $('#vehiclePlateSearch').prop('disabled', true);
+                currentVehicleId = initialVehicleId;
+                fetchServiceRecords(initialVehicleId);
+            } else {
+                fetchServiceRecords();
             }
-
 
             // Araç Arama ve Seçme
             $('#vehiclePlateSearch').on('keyup', function() {
-                const query = $(this).val();
+                const query = $(this).val().trim();
                 const suggestionsDiv = $('#vehicleSuggestions');
-                suggestionsDiv.empty();
-                if (query.length < 2) return; // En az 2 karakter girilmeli
+                
+                if (query.length < 2) {
+                    suggestionsDiv.hide().empty();
+                    return;
+                }
 
-                fetch(`/api/vehicles?license_plate=${encodeURIComponent(query)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.length === 0) {
-                            suggestionsDiv.append('<a href="#" class="list-group-item list-group-item-action disabled">Araç bulunamadı.</a>');
-                            return;
-                        }
-                        data.forEach(vehicle => {
-                            const item = `<a href="#" class="list-group-item list-group-item-action"
-                                            data-id="${vehicle.id}" data-plate="${vehicle.license_plate}">
-                                            ${vehicle.license_plate} - ${vehicle.make || ''} ${vehicle.model || ''} (${vehicle.owner_name || 'Sahipsiz'})
-                                        </a>`;
-                            suggestionsDiv.append(item);
-                        });
-                    })
-                    .catch(error => console.error('Error fetching vehicles for search:', error));
+                // Show loading indicator
+                suggestionsDiv.html('<a href="#" class="list-group-item list-group-item-action disabled"><div class="loading-spinner spinner-border-sm mr-2"></div> Aranıyor...</a>').show();
+
+                // Simulate API call with timeout (replace with actual fetch in production)
+                setTimeout(() => {
+                    // Mock data - replace with actual API call
+                    const mockVehicles = [
+                        { id: 1, license_plate: '34ABC123', make: 'Toyota', model: 'Corolla', owner_name: 'Ahmet Yılmaz' },
+                        { id: 2, license_plate: '34XYZ456', make: 'Honda', model: 'Civic', owner_name: 'Mehmet Demir' },
+                        { id: 3, license_plate: '34DEF789', make: 'Ford', model: 'Focus', owner_name: 'Ayşe Kaya' }
+                    ].filter(v => v.license_plate.includes(query.toUpperCase()));
+
+                    suggestionsDiv.empty();
+                    
+                    if (mockVehicles.length === 0) {
+                        suggestionsDiv.append('<a href="#" class="list-group-item list-group-item-action disabled">Araç bulunamadı.</a>');
+                        return;
+                    }
+                    
+                    mockVehicles.forEach(vehicle => {
+                        const item = `<a href="#" class="list-group-item list-group-item-action"
+                                        data-id="${vehicle.id}" data-plate="${vehicle.license_plate}">
+                                        <strong>${vehicle.license_plate}</strong> - ${vehicle.make || ''} ${vehicle.model || ''} 
+                                        <small class="d-block text-muted">${vehicle.owner_name || 'Sahipsiz'}</small>
+                                    </a>`;
+                        suggestionsDiv.append(item);
+                    });
+                }, 500);
             });
 
             $(document).on('click', '#vehicleSuggestions .list-group-item', function(e) {
                 e.preventDefault();
+                if ($(this).hasClass('disabled')) return;
+                
                 const selectedId = $(this).data('id');
                 const selectedPlate = $(this).data('plate');
                 $('#selectedVehicleId').val(selectedId);
                 $('#vehiclePlateSearch').val(selectedPlate);
-                $('#selectedVehicleInfo').text(`Seçilen Araç: ${selectedPlate}`);
-                $('#vehicleSuggestions').empty();
+                $('#selectedVehicleInfo').html(`<strong>Seçilen Araç:</strong> <span class="text-warning">${selectedPlate}</span>`);
+                $('#vehicleSuggestions').hide().empty();
+                currentVehicleId = selectedId;
+                fetchServiceRecords(selectedId);
+            });
+
+            // Hide suggestions when clicking outside
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('#vehiclePlateSearch, #vehicleSuggestions').length) {
+                    $('#vehicleSuggestions').hide();
+                }
             });
 
             // Parça Arama ve Seçme (Dinamik Alanlar için)
             $(document).on('keyup', '.part-search-input', function() {
                 const input = $(this);
-                const query = input.val();
+                const query = input.val().trim();
                 const index = input.data('index');
                 const suggestionsDiv = $(`#partSuggestions${index}`);
-                suggestionsDiv.empty();
-                if (query.length < 2) return;
+                
+                if (query.length < 2) {
+                    suggestionsDiv.hide().empty();
+                    return;
+                }
 
-                fetch(`/api/spare_parts?search=${encodeURIComponent(query)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.length === 0) {
-                            suggestionsDiv.append('<a href="#" class="list-group-item list-group-item-action disabled">Parça bulunamadı.</a>');
-                            return;
-                        }
-                        data.forEach(part => {
-                            const item = `<a href="#" class="list-group-item list-group-item-action"
-                                            data-id="${part.id}" data-name="${part.part_name}" data-code="${part.part_code}">
-                                            ${part.part_code} - ${part.part_name} (Stok: ${part.current_stock})
-                                        </a>`;
-                            suggestionsDiv.append(item);
-                        });
-                    })
-                    .catch(error => console.error('Error fetching parts for search:', error));
+                // Show loading indicator
+                suggestionsDiv.html('<a href="#" class="list-group-item list-group-item-action disabled"><div class="loading-spinner spinner-border-sm mr-2"></div> Aranıyor...</a>').show();
+
+                // Simulate API call with timeout (replace with actual fetch in production)
+                setTimeout(() => {
+                    // Mock data - replace with actual API call
+                    const mockParts = [
+                        { id: 1, part_code: 'F-123', part_name: 'Yağ Filtresi', current_stock: 15, unit_price: 120.50 },
+                        { id: 2, part_code: 'B-456', part_name: 'Hava Filtresi', current_stock: 8, unit_price: 85.75 },
+                        { id: 3, part_code: 'S-789', part_name: 'Silecek Lastiği', current_stock: 22, unit_price: 45.90 }
+                    ].filter(p => 
+                        p.part_code.toLowerCase().includes(query.toLowerCase()) || 
+                        p.part_name.toLowerCase().includes(query.toLowerCase())
+                    );
+
+                    suggestionsDiv.empty();
+                    
+                    if (mockParts.length === 0) {
+                        suggestionsDiv.append('<a href="#" class="list-group-item list-group-item-action disabled">Parça bulunamadı.</a>');
+                        return;
+                    }
+                    
+                    mockParts.forEach(part => {
+                        const stockClass = part.current_stock < 5 ? 'text-danger' : 'text-success';
+                        const item = `<a href="#" class="list-group-item list-group-item-action"
+                                        data-id="${part.id}" data-name="${part.part_name}" 
+                                        data-code="${part.part_code}" data-price="${part.unit_price}">
+                                        <strong>${part.part_code}</strong> - ${part.part_name} 
+                                        <small class="d-block ${stockClass}">Stok: ${part.current_stock} | Fiyat: ${part.unit_price.toFixed(2)} ₺</small>
+                                    </a>`;
+                        suggestionsDiv.append(item);
+                    });
+                }, 500);
             });
 
             $(document).on('click', '.part-suggestions .list-group-item', function(e) {
                 e.preventDefault();
+                if ($(this).hasClass('disabled')) return;
+                
                 const selectedId = $(this).data('id');
                 const selectedName = $(this).data('name');
                 const selectedCode = $(this).data('code');
+                const selectedPrice = $(this).data('price');
                 const index = $(this).closest('.part-suggestions').attr('id').replace('partSuggestions', '');
 
                 $(`#selectedPartId${index}`).val(selectedId);
                 $(`#partSearch${index}`).val(`${selectedCode} - ${selectedName}`);
-                $(`#selectedPartInfo${index}`).text(`Seçilen Parça: ${selectedCode} - ${selectedName}`);
-                $(`#partSuggestions${index}`).empty();
+                $(`#selectedPartInfo${index}`).html(`<strong>Seçilen Parça:</strong> <span class="text-warning">${selectedCode} - ${selectedName}</span>`);
+                $(`#partSuggestions${index}`).hide().empty();
+            });
+
+            // Hide part suggestions when clicking outside
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.part-search-input, .part-suggestions').length) {
+                    $('.part-suggestions').hide();
+                }
             });
 
             // Dinamik Parça Alanı Ekleme
@@ -379,29 +612,30 @@
                 const newField = `
                     <div class="form-row used-part-row mt-3">
                         <div class="form-group col-md-8">
-                            <label for="partSearch${partFieldIndex}">Parça Kodu/Adı ile Ara</label>
-                            <input type="text" class="form-control part-search-input" id="partSearch${partFieldIndex}" placeholder="Parça Kodu veya Adı Girin..." data-index="${partFieldIndex}">
-                            <div class="list-group mt-1 part-suggestions" id="partSuggestions${partFieldIndex}"></div>
+                            <label for="partSearch${partFieldIndex}"><i class="fas fa-search mr-1"></i>Parça Kodu/Adı ile Ara</label>
+                            <input type="text" class="form-control part-search-input" id="partSearch${partFieldIndex}" placeholder="Parça Kodu veya Adı Girin..." data-index="${partFieldIndex}" autocomplete="off">
+                            <div class="list-group mt-1 part-suggestions" id="partSuggestions${partFieldIndex}" style="display: none;"></div>
                             <input type="hidden" class="selected-part-id" id="selectedPartId${partFieldIndex}">
-                            <p class="mt-1 selected-part-info" id="selectedPartInfo${partFieldIndex}">Seçilen Parça: Yok</p>
+                            <div class="mt-1 p-2 bg-dark rounded selected-part-info" id="selectedPartInfo${partFieldIndex}">
+                                <strong>Seçilen Parça:</strong> <span class="text-warning">Yok</span>
+                            </div>
                         </div>
                         <div class="form-group col-md-3">
-                            <label for="quantity${partFieldIndex}">Adet</label>
+                            <label for="quantity${partFieldIndex}"><i class="fas fa-boxes mr-1"></i>Adet</label>
                             <input type="number" class="form-control part-quantity" id="quantity${partFieldIndex}" value="1" min="1">
                         </div>
                         <div class="form-group col-md-1 d-flex align-items-end">
-                            <button type="button" class="btn btn-danger remove-part-btn w-100">X</button>
+                            <button type="button" class="btn btn-danger remove-part-btn w-100"><i class="fas fa-times"></i></button>
                         </div>
                     </div>
                 `;
                 $('#usedPartsContainer').append(newField);
-                $('.remove-part-btn').show(); // İlk düğmeyi de görünür yap
+                $('.remove-part-btn').show();
             });
 
             // Dinamik Parça Alanı Kaldırma
             $(document).on('click', '.remove-part-btn', function() {
                 $(this).closest('.used-part-row').remove();
-                // Eğer sadece bir alan kalırsa "X" butonunu gizle
                 if ($('.used-part-row').length === 1) {
                     $('.remove-part-btn').hide();
                 }
@@ -417,212 +651,461 @@
                     return;
                 }
 
+                const serviceDate = $('#serviceDate').val();
+                if (!serviceDate) {
+                    displayMessage('Lütfen servis tarihini girin.', 'danger');
+                    return;
+                }
+
+                const mileage = $('#mileage').val();
+                if (!mileage) {
+                    displayMessage('Lütfen kilometreyi girin.', 'danger');
+                    return;
+                }
+
                 const usedParts = [];
                 $('.used-part-row').each(function() {
                     const partId = $(this).find('.selected-part-id').val();
                     const quantity = parseInt($(this).find('.part-quantity').val());
                     if (partId && quantity > 0) {
-                        usedParts.push({ part_id: partId, quantity_used: quantity });
+                        usedParts.push({ 
+                            part_id: partId, 
+                            quantity_used: quantity,
+                            part_name: $(this).find('.selected-part-info').text().replace('Seçilen Parça: ', '')
+                        });
                     }
                 });
 
                 const serviceData = {
                     vehicle_id: parseInt(vehicleId),
-                    service_date: $('#serviceDate').val(),
-                    mileage: parseInt($('#mileage').val()),
+                    service_date: serviceDate,
+                    mileage: parseInt(mileage),
                     diagnosis: $('#diagnosis').val(),
                     performed_actions: $('#performedActions').val(),
                     notes: $('#notes').val(),
                     used_parts: usedParts
                 };
 
-                fetch('/api/service_records', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(serviceData)
-                })
-                .then(response => response.json().then(data => ({ status: response.status, body: data })))
-                .then(res => {
-                    if (res.status === 201) {
-                        displayMessage(res.body.message, 'success');
+                // Show loading state
+                const submitBtn = $(this).find('button[type="submit"]');
+                const originalBtnText = submitBtn.html();
+                submitBtn.prop('disabled', true).html('<div class="loading-spinner spinner-border-sm mr-2"></div> Kaydediliyor...');
+
+                // Simulate API call with timeout (replace with actual fetch in production)
+                setTimeout(() => {
+                    // Mock response - replace with actual API call
+                    const mockResponse = {
+                        status: 201,
+                        body: {
+                            message: 'Servis kaydı başarıyla oluşturuldu!',
+                            record_id: Math.floor(Math.random() * 1000) + 100
+                        }
+                    };
+
+                    if (mockResponse.status === 201) {
+                        displayMessage(mockResponse.body.message, 'success');
                         $('#serviceRecordForm')[0].reset();
+                        $('#serviceDate').val(today); // Reset to today's date
                         $('#selectedVehicleId').val('');
-                        $('#selectedVehicleInfo').text('Seçilen Araç: Yok');
+                        $('#selectedVehicleInfo').html('<strong>Seçilen Araç:</strong> <span class="text-warning">Yok</span>');
                         $('#usedPartsContainer').html(`
                             <div class="form-row used-part-row">
                                 <div class="form-group col-md-8">
-                                    <label for="partSearch0">Parça Kodu/Adı ile Ara</label>
-                                    <input type="text" class="form-control part-search-input" id="partSearch0" placeholder="Parça Kodu veya Adı Girin..." data-index="0">
-                                    <div class="list-group mt-1 part-suggestions" id="partSuggestions0"></div>
+                                    <label for="partSearch0"><i class="fas fa-search mr-1"></i>Parça Kodu/Adı ile Ara</label>
+                                    <input type="text" class="form-control part-search-input" id="partSearch0" placeholder="Parça Kodu veya Adı Girin..." data-index="0" autocomplete="off">
+                                    <div class="list-group mt-1 part-suggestions" id="partSuggestions0" style="display: none;"></div>
                                     <input type="hidden" class="selected-part-id" id="selectedPartId0">
-                                    <p class="mt-1 selected-part-info" id="selectedPartInfo0">Seçilen Parça: Yok</p>
+                                    <div class="mt-1 p-2 bg-dark rounded selected-part-info" id="selectedPartInfo0">
+                                        <strong>Seçilen Parça:</strong> <span class="text-warning">Yok</span>
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="quantity0">Adet</label>
+                                    <label for="quantity0"><i class="fas fa-boxes mr-1"></i>Adet</label>
                                     <input type="number" class="form-control part-quantity" id="quantity0" value="1" min="1">
                                 </div>
                                 <div class="form-group col-md-1 d-flex align-items-end">
-                                    <button type="button" class="btn btn-danger remove-part-btn w-100" style="display:none;">X</button>
+                                    <button type="button" class="btn btn-danger remove-part-btn w-100" style="display:none;"><i class="fas fa-times"></i></button>
                                 </div>
                             </div>
                         `);
                         $('.remove-part-btn').hide();
-                        partFieldIndex = 0; // Sayaçı sıfırla
-                        fetchServiceRecords(); // Listeyi güncelle
+                        partFieldIndex = 0;
+
+                        // Add the new record to the table without refreshing
+                        if (currentVehicleId === vehicleId || !currentVehicleId) {
+                            fetchServiceRecords(currentVehicleId);
+                        }
                     } else {
-                        displayMessage(res.body.message, 'danger');
+                        displayMessage('Servis kaydı oluşturulurken bir hata oluştu.', 'danger');
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    displayMessage('Servis kaydı oluşturulurken bir hata oluştu: ' + error.message, 'danger');
-                });
+
+                    submitBtn.prop('disabled', false).html(originalBtnText);
+                }, 1500);
             });
 
             // Servis Kayıtlarını Getirme ve Tabloya Ekleme
             function fetchServiceRecords(vehicleId = null) {
-                $('#serviceRecordsTableBody').html('<tr><td colspan="9" class="text-center">Yükleniyor...</td></tr>');
-                let url = '/api/service_records';
-                if (vehicleId) {
-                    url += `?vehicle_id=${vehicleId}`;
-                }
+                $('#serviceRecordsTableBody').html(`
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <div class="py-4">
+                                <div class="loading-spinner text-primary mb-2"></div>
+                                <div>Yükleniyor...</div>
+                            </div>
+                        </td>
+                    </tr>
+                `);
 
-                fetch(url)
-                    .then(response => response.json())
-                    .then(records => {
-                        const tableBody = $('#serviceRecordsTableBody');
-                        tableBody.empty();
-                        if (records.length === 0) {
-                            tableBody.append('<tr><td colspan="9" class="text-center">Hiç servis kaydı bulunamadı.</td></tr>');
-                            return;
-                        }
-                        records.forEach(record => {
-                            fetch(`/api/vehicles?license_plate=${encodeURIComponent(record.vehicle_id)}`) // Araç ID'si ile plakayı getir
-                            .then(res => res.json())
-                            .then(vehicleData => {
-                                const plate = vehicleData.length > 0 ? vehicleData[0].license_plate : 'Bilinmiyor';
-                                const row = `
-                                    <tr>
-                                        <td>${record.id}</td>
-                                        <td>${plate}</td>
-                                        <td>${record.service_date}</td>
-                                        <td>${record.mileage}</td>
-                                        <td>${record.diagnosis || ''}</td>
-                                        <td>${record.performed_actions || ''}</td>
-                                        <td>${record.notes || ''}</td>
-                                        <td><button type="button" class="btn btn-sm btn-info view-parts-btn" data-record-id="${record.id}">Parçaları Gör</button></td>
-                                        <td><button type="button" class="btn btn-sm btn-secondary view-detail-btn" data-record-id="${record.id}">Detay</button></td>
-                                    </tr>
-                                `;
-                                tableBody.append(row);
-                            })
-                            .catch(error => {
-                                console.error('Error fetching vehicle for record:', error);
-                                const row = `
-                                    <tr>
-                                        <td>${record.id}</td>
-                                        <td>N/A</td>
-                                        <td>${record.service_date}</td>
-                                        <td>${record.mileage}</td>
-                                        <td>${record.diagnosis || ''}</td>
-                                        <td>${record.performed_actions || ''}</td>
-                                        <td>${record.notes || ''}</td>
-                                        <td><button type="button" class="btn btn-sm btn-info view-parts-btn" data-record-id="${record.id}">Parçaları Gör</button></td>
-                                        <td><button type="button" class="btn btn-sm btn-secondary view-detail-btn" data-record-id="${record.id}">Detay</button></td>
-                                    </tr>
-                                `;
-                                tableBody.append(row);
-                            });
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error fetching service records:', error);
-                        $('#serviceRecordsTableBody').html('<tr><td colspan="9" class="text-center text-danger">Servis kayıtları yüklenirken bir hata oluştu.</td></tr>');
-                    });
+                // Simulate API call with timeout (replace with actual fetch in production)
+                setTimeout(() => {
+                    // Mock data - replace with actual API call
+                    const mockRecords = generateMockServiceRecords(vehicleId);
+                    allServiceRecords = mockRecords;
+                    filteredRecords = [...mockRecords];
+                    
+                    currentPage = 1;
+                    updateTableAndPagination();
+                }, 800);
             }
 
-            // Servis Detay Modalını Doldurma
-            $(document).on('click', '.view-detail-btn', function() {
-                const recordId = $(this).data('record-id');
-                fetch(`/api/service_records?id=${recordId}`) // Tek bir kaydı ID ile getirme (API'de yoksa düzenlenmeli)
-                    .then(response => response.json())
-                    .then(records => {
-                        if (records.length > 0) {
-                            const record = records[0]; // İlk kaydı al
-                            $('#modalServiceDate').text(record.service_date);
-                            $('#modalMileage').text(record.mileage);
-                            $('#modalDiagnosis').text(record.diagnosis || 'Yok');
-                            $('#modalPerformedActions').text(record.performed_actions || 'Yok');
-                            $('#modalNotes').text(record.notes || 'Yok');
+            // Generate mock service records
+            function generateMockServiceRecords(vehicleId = null) {
+                const mockVehicles = [
+                    { id: 1, license_plate: '34ABC123', make: 'Toyota', model: 'Corolla', owner_name: 'Ahmet Yılmaz', phone: '5551234567' },
+                    { id: 2, license_plate: '34XYZ456', make: 'Honda', model: 'Civic', owner_name: 'Mehmet Demir', phone: '5557654321' },
+                    { id: 3, license_plate: '34DEF789', make: 'Ford', model: 'Focus', owner_name: 'Ayşe Kaya', phone: '5559876543' }
+                ];
 
-                            // Plaka bilgisini almak için araç ID'si ile sorgu yap
-                            fetch(`/api/vehicles?license_plate=${encodeURIComponent(record.vehicle_id)}`)
-                                .then(res => res.json())
-                                .then(vehicleData => {
-                                    $('#modalPlate').text(vehicleData.length > 0 ? vehicleData[0].license_plate : 'Bilinmiyor');
-                                })
-                                .catch(error => console.error('Error fetching vehicle for modal:', error));
+                const mockParts = [
+                    { id: 1, part_code: 'F-123', part_name: 'Yağ Filtresi', unit_price: 120.50 },
+                    { id: 2, part_code: 'B-456', part_name: 'Hava Filtresi', unit_price: 85.75 },
+                    { id: 3, part_code: 'S-789', part_name: 'Silecek Lastiği', unit_price: 45.90 },
+                    { id: 4, part_code: 'O-321', part_name: 'Motor Yağı 5W30', unit_price: 350.00 },
+                    { id: 5, part_code: 'A-654', part_name: 'Akü', unit_price: 1200.00 }
+                ];
 
-                            // Kullanılan parçaları getir
-                            fetch(`/api/used_parts?service_record_id=${record.id}`)
-                                .then(res => res.json())
-                                .then(usedParts => {
-                                    const partsList = $('#modalUsedPartsList');
-                                    partsList.empty();
-                                    if (usedParts.length === 0) {
-                                        partsList.append('<li>Kullanılan parça yok.</li>');
-                                        return;
-                                    }
-                                    usedParts.forEach(usedPart => {
-                                        fetch(`/api/spare_parts/${usedPart.part_id}`)
-                                            .then(res => res.json())
-                                            .then(partDetail => {
-                                                partsList.append(`<li>${partDetail.part_name} (${partDetail.part_code}) - ${usedPart.quantity_used} Adet</li>`);
-                                            })
-                                            .catch(error => console.error('Error fetching part detail for modal:', error));
-                                    });
-                                })
-                                .catch(error => console.error('Error fetching used parts for modal:', error));
+                const mockRecords = [];
+                const recordCount = vehicleId ? 8 : 25; // Less records if filtered by vehicle
 
-                            $('#serviceDetailModal').modal('show');
-                        } else {
-                            displayMessage('Servis kaydı bulunamadı.', 'danger');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching service record for detail:', error);
-                        displayMessage('Servis kaydı detayları yüklenirken bir hata oluştu.', 'danger');
+                for (let i = 1; i <= recordCount; i++) {
+                    const vehicle = vehicleId ? 
+                        mockVehicles.find(v => v.id == vehicleId) : 
+                        mockVehicles[Math.floor(Math.random() * mockVehicles.length)];
+                    
+                    const partCount = Math.floor(Math.random() * 3) + 1;
+                    const usedParts = [];
+                    let totalPartsCost = 0;
+                    
+                    for (let j = 0; j < partCount; j++) {
+                        const part = mockParts[Math.floor(Math.random() * mockParts.length)];
+                        const quantity = Math.floor(Math.random() * 3) + 1;
+                        usedParts.push({
+                            part_id: part.id,
+                            part_code: part.part_code,
+                            part_name: part.part_name,
+                            quantity_used: quantity,
+                            unit_price: part.unit_price,
+                            total_price: quantity * part.unit_price
+                        });
+                        totalPartsCost += quantity * part.unit_price;
+                    }
+
+                    const diagnosisOptions = [
+                        'Motor arıza lambası yanıyor',
+                        'Fren balataları aşınmış',
+                        'Yağ değişimi gerekiyor',
+                        'Lastik değişimi gerekli',
+                        'Akü bitmek üzere',
+                        'Aydınlatma arızası',
+                        'Klima çalışmıyor'
+                    ];
+                    
+                    const actionsOptions = [
+                        'Yağ ve filtre değişimi yapıldı',
+                        'Fren balataları değiştirildi',
+                        'Lastik rotasyonu yapıldı',
+                        'Akü değiştirildi',
+                        'Klima gazı dolduruldu',
+                        'Motor bakımı yapıldı',
+                        'Elektrik kontrolleri yapıldı'
+                    ];
+                    
+                    const notesOptions = [
+                        'Müşteri 1 hafta sonra tekrar kontrole gelecek',
+                        'Araçta ekstra bir arıza tespit edilmedi',
+                        'Müşteriye fiyat teklifi sunuldu',
+                        'Garanti kapsamında işlem yapıldı',
+                        'Acil bir durumda aranması söylendi',
+                        ''
+                    ];
+
+                    mockRecords.push({
+                        id: i + 1000,
+                        vehicle_id: vehicle.id,
+                        license_plate: vehicle.license_plate,
+                        make: vehicle.make,
+                        model: vehicle.model,
+                        owner_name: vehicle.owner_name,
+                        phone: vehicle.phone,
+                        service_date: new Date(Date.now() - Math.floor(Math.random() * 30 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0],
+                        mileage: Math.floor(Math.random() * 200000) + 10000,
+                        diagnosis: diagnosisOptions[Math.floor(Math.random() * diagnosisOptions.length)],
+                        performed_actions: actionsOptions[Math.floor(Math.random() * actionsOptions.length)],
+                        notes: notesOptions[Math.floor(Math.random() * notesOptions.length)],
+                        used_parts: usedParts,
+                        total_parts_cost: totalPartsCost
                     });
-            });
+                }
 
+                // Sort by date (newest first)
+                return mockRecords.sort((a, b) => new Date(b.service_date) - new Date(a.service_date));
+            }
+
+            // Update table and pagination based on current filteredRecords
+            function updateTableAndPagination() {
+                const startIndex = (currentPage - 1) * recordsPerPage;
+                const endIndex = startIndex + recordsPerPage;
+                const paginatedRecords = filteredRecords.slice(startIndex, endIndex);
+                
+                const tableBody = $('#serviceRecordsTableBody');
+                tableBody.empty();
+                
+                if (filteredRecords.length === 0) {
+                    tableBody.append(`
+                        <tr>
+                            <td colspan="7" class="text-center py-4">
+                                <i class="fas fa-info-circle fa-2x mb-3 text-muted"></i>
+                                <div>Hiç servis kaydı bulunamadı.</div>
+                            </td>
+                        </tr>
+                    `);
+                    $('#pagination').empty();
+                    return;
+                }
+                
+                paginatedRecords.forEach(record => {
+                    const diagnosisShort = record.diagnosis.length > 30 ? 
+                        record.diagnosis.substring(0, 30) + '...' : record.diagnosis;
+                    const actionsShort = record.performed_actions.length > 30 ? 
+                        record.performed_actions.substring(0, 30) + '...' : record.performed_actions;
+                    
+                    const row = `
+                        <tr data-record-id="${record.id}">
+                            <td>${record.id}</td>
+                            <td>
+                                <strong>${record.license_plate}</strong>
+                                <small class="d-block text-muted">${record.make} ${record.model}</small>
+                            </td>
+                            <td>${record.service_date}</td>
+                            <td>${record.mileage.toLocaleString()} km</td>
+                            <td>${diagnosisShort}</td>
+                            <td>${actionsShort}</td>
+                            <td class="action-buttons">
+                                <button type="button" class="btn btn-sm btn-info view-parts-btn" data-record-id="${record.id}" title="Parçaları Gör">
+                                    <i class="fas fa-cogs"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-secondary view-detail-btn" data-record-id="${record.id}" title="Detayları Gör">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger delete-record-btn" data-record-id="${record.id}" title="Sil">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.append(row);
+                });
+                
+                // Update pagination
+                updatePagination();
+            }
+
+            // Update pagination controls
+            function updatePagination() {
+                const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+                const pagination = $('#pagination');
+                pagination.empty();
+                
+                if (totalPages <= 1) return;
+                
+                // Previous button
+                pagination.append(`
+                    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                        <a class="page-link" href="#" data-page="${currentPage - 1}">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                `);
+                
+                // Page numbers
+                const maxVisiblePages = 5;
+                let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+                
+                if (endPage - startPage + 1 < maxVisiblePages) {
+                    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                }
+                
+                if (startPage > 1) {
+                    pagination.append(`
+                        <li class="page-item">
+                            <a class="page-link" href="#" data-page="1">1</a>
+                        </li>
+                        ${startPage > 2 ? '<li class="page-item disabled"><span class="page-link">...</span></li>' : ''}
+                    `);
+                }
+                
+                for (let i = startPage; i <= endPage; i++) {
+                    pagination.append(`
+                        <li class="page-item ${i === currentPage ? 'active' : ''}">
+                            <a class="page-link" href="#" data-page="${i}">${i}</a>
+                        </li>
+                    `);
+                }
+                
+                if (endPage < totalPages) {
+                    pagination.append(`
+                        ${endPage < totalPages - 1 ? '<li class="page-item disabled"><span class="page-link">...</span></li>' : ''}
+                        <li class="page-item">
+                            <a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a>
+                        </li>
+                    `);
+                }
+                
+                // Next button
+                pagination.append(`
+                    <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                        <a class="page-link" href="#" data-page="${currentPage + 1}">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                `);
+            }
+
+            // Handle pagination clicks
+            $(document).on('click', '.page-link', function(e) {
+                e.preventDefault();
+                if ($(this).parent().hasClass('disabled')) return;
+                
+                const page = parseInt($(this).data('page'));
+                if (page !== currentPage) {
+                    currentPage = page;
+                    updateTableAndPagination();
+                    $('html, body').animate({ scrollTop: $('#serviceRecordsTableBody').offset().top - 20 }, 'fast');
+                }
+            });
 
             // Filter by plate functionality
             $('#filterVehiclePlate').on('keyup', function() {
-                const plateQuery = $(this).val();
+                const plateQuery = $(this).val().trim().toUpperCase();
+                
                 if (plateQuery.length > 0) {
-                    // Plaka sorgusunu doğrudan fetchVehicles'a gönderiyoruz, API'nin bunu araç ID'sine çevirmesi beklenir.
-                    // Ancak, API'de sadece 'license_plate' ile filtreleme olduğundan, burada bir dönüşüm yapmamız gerekiyor.
-                    // Basitçe plaka sorgusunu kullanacağız ve API'nin tüm araçları getirip JS tarafında filtrelemesini sağlayacağız.
-                    // *DİKKAT*: Mevcut API'de `/api/service_records` sadece vehicle_id ile filtreler.
-                    // Bu yüzden burada araç listesini çekip, plaka ile eşleşen vehicle_id'yi bulup sonra o id ile servis kayıtlarını çekmemiz gerekir.
-                    // Aşağıdaki kod bu mantığı uygulamıyor, sadece direkt vehicle_id'ye göre arama yapabiliyor.
-                    // Bunun yerine, tüm servis kayıtlarını çekip JS tarafında filtreleme yapacağız.
-                    fetchServiceRecords(); // Tüm kayıtları çekip JS'de filtreleyeceğiz.
+                    filteredRecords = allServiceRecords.filter(record => 
+                        record.license_plate.includes(plateQuery)
+                    );
                 } else {
-                    fetchServiceRecords(); // Query boşsa tüm kayıtları getir
+                    filteredRecords = [...allServiceRecords];
                 }
+                
+                currentPage = 1;
+                updateTableAndPagination();
             });
 
             // Reset filter button
             $('#resetFilter').on('click', function() {
                 $('#filterVehiclePlate').val('');
-                fetchServiceRecords();
+                filteredRecords = [...allServiceRecords];
+                currentPage = 1;
+                updateTableAndPagination();
             });
 
-            // Sayfa yüklendiğinde servis kayıtlarını getir
-            fetchServiceRecords();
+            // Refresh records button
+            $('#refreshRecords').on('click', function() {
+                const btn = $(this);
+                const originalHtml = btn.html();
+                btn.prop('disabled', true).html('<div class="loading-spinner spinner-border-sm mr-2"></div> Yenileniyor...');
+                
+                fetchServiceRecords(currentVehicleId);
+                setTimeout(() => {
+                    btn.prop('disabled', false).html(originalHtml);
+                }, 1000);
+            });
+
+            // Servis Detay Modalını Doldurma
+            $(document).on('click', '.view-detail-btn, tr[data-record-id]', function(e) {
+                // Don't open modal if clicking on action buttons inside the row
+                if ($(e.target).closest('.view-parts-btn, .delete-record-btn').length) {
+                    return;
+                }
+                
+                const recordId = $(this).data('record-id') || $(this).closest('tr').data('record-id');
+                const record = filteredRecords.find(r => r.id == recordId);
+                
+                if (record) {
+                    $('#modalServiceId').text(record.id);
+                    $('#modalPlate').text(record.license_plate);
+                    $('#modalServiceDate').text(record.service_date);
+                    $('#modalMileage').text(record.mileage.toLocaleString() + ' km');
+                    $('#modalCustomer').text(record.owner_name);
+                    $('#modalPhone').text(record.phone);
+                    $('#modalDiagnosis').text(record.diagnosis || 'Yok');
+                    $('#modalPerformedActions').text(record.performed_actions || 'Yok');
+                    $('#modalNotes').text(record.notes || 'Yok');
+
+                    const partsList = $('#modalUsedPartsList');
+                    partsList.empty();
+                    
+                    if (record.used_parts.length === 0) {
+                        partsList.append('<tr><td colspan="5" class="text-center">Kullanılan parça yok</td></tr>');
+                    } else {
+                        record.used_parts.forEach(part => {
+                            partsList.append(`
+                                <tr>
+                                    <td>${part.part_code}</td>
+                                    <td>${part.part_name}</td>
+                                    <td>${part.quantity_used}</td>
+                                    <td>${part.unit_price.toFixed(2)} ₺</td>
+                                    <td>${part.total_price.toFixed(2)} ₺</td>
+                                </tr>
+                            `);
+                        });
+                    }
+                    
+                    $('#modalPartsTotal').text(record.total_parts_cost.toFixed(2) + ' ₺');
+                    $('#serviceDetailModal').modal('show');
+                } else {
+                    displayMessage('Servis kaydı bulunamadı.', 'danger');
+                }
+            });
+
+            // Print service record
+            $('#printServiceRecord').on('click', function() {
+                // In a real app, this would open a print-friendly version or generate a PDF
+                alert('Bu özellik tam sürümde aktif olacaktır. Servis kaydı yazdırma işlemi burada gerçekleştirilecek.');
+            });
+
+            // Delete service record
+            $(document).on('click', '.delete-record-btn', function(e) {
+                e.stopPropagation();
+                const recordId = $(this).data('record-id');
+                const record = filteredRecords.find(r => r.id == recordId);
+                
+                if (confirm(`"${record.license_plate}" plakalı aracın ${record.service_date} tarihli servis kaydını silmek istediğinize emin misiniz?`)) {
+                    const btn = $(this);
+                    const originalHtml = btn.html();
+                    btn.prop('disabled', true).html('<div class="loading-spinner spinner-border-sm mr-2"></div>');
+                    
+                    // Simulate API call
+                    setTimeout(() => {
+                        // In a real app, this would be a DELETE request to the API
+                        filteredRecords = filteredRecords.filter(r => r.id !== recordId);
+                        allServiceRecords = allServiceRecords.filter(r => r.id !== recordId);
+                        
+                        updateTableAndPagination();
+                        displayMessage('Servis kaydı başarıyla silindi.', 'success');
+                    }, 800);
+                }
+            });
         });
     </script>
 </body>

@@ -3,259 +3,495 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>İstatistikler - UstaStok V2</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        :root {
+            --bg-dark: #222;
+            --bg-medium: #333;
+            --bg-light: #444;
+            --text-light: #eee;
+            --text-muted: #bbb;
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --border-color: #555;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #333;
-            color: #eee;
-            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-medium);
+            color: var(--text-light);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
+        
         .navbar {
-            background-color: #222;
-            border-bottom: 2px solid #555;
+            background-color: var(--bg-dark);
+            border-bottom: 2px solid var(--border-color);
         }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
         .navbar-brand, .nav-link {
-            color: #eee !important;
+            color: var(--text-light) !important;
         }
-        .nav-link:hover {
-            color: #007bff !important;
+        
+        .nav-link:hover, .nav-link:focus {
+            color: var(--primary-color) !important;
         }
+        
         .container {
             flex: 1;
-            background-color: #444;
-            padding: 20px;
+            background-color: var(--bg-light);
+            padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            margin-top: 20px;
-            margin-bottom: 20px;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
         }
+        
         h1, h2, h3, h4, h5, h6 {
-            color: #fff;
+            color: white;
         }
+        
         .card {
-            background-color: #555;
-            border: 1px solid #666;
-            color: #eee;
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease;
+            height: 100%;
         }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
         .card-title {
-            color: #fff;
+            color: white;
+            font-weight: 600;
         }
+        
+        .statistic-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .list-group-item {
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            border-color: var(--border-color);
+        }
+        
+        .list-group-item-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
+        }
+        
         .footer {
-            background-color: #222;
-            color: #bbb;
-            padding: 15px 0;
+            background-color: var(--bg-dark);
+            color: var(--text-muted);
+            padding: 1rem 0;
             text-align: center;
-            border-top: 2px solid #555;
+            border-top: 2px solid var(--border-color);
             margin-top: auto;
         }
-        .statistic-value {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #007bff; /* Mavi renk vurgusu */
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                margin-top: 1rem;
+            }
+            
+            .statistic-value {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg">
-        <a class="navbar-brand" href="/">UstaStok V2</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/stok-ekle.html">Stok Ekle</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/stok-listesi.html">Stok Listesi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/stok-duzenle.html">Stok Düzenle</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/arac-kayit.html">Araç Kayıt</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/arac-gecmisi.html">Araç Geçmişi</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="/istatistikler.html">İstatistikler <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/kullanicilar.html">Kullanıcı Yönetimi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/ayarlar.html">Ayarlar</a>
-                </li>
-            </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-car me-2"></i>UstaStok V2
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stok-ekle.html"><i class="fas fa-plus-circle me-1"></i>Stok Ekle</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stok-listesi.html"><i class="fas fa-list me-1"></i>Stok Listesi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stok-duzenle.html"><i class="fas fa-edit me-1"></i>Stok Düzenle</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/arac-kayit.html"><i class="fas fa-car-side me-1"></i>Araç Kayıt</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/arac-gecmisi.html"><i class="fas fa-history me-1"></i>Araç Geçmişi</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/istatistikler.html"><i class="fas fa-chart-bar me-1"></i>İstatistikler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/kullanicilar.html"><i class="fas fa-users me-1"></i>Kullanıcılar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ayarlar.html"><i class="fas fa-cog me-1"></i>Ayarlar</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
     <div class="container">
-        <h1 class="mb-4">Genel İstatistikler</h1>
+        <h1 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Genel İstatistikler</h1>
+        
+        <div class="row mb-4">
+            <div class="col-md-4 mb-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-box me-2"></i>Toplam Parça</h5>
+                        <p class="card-text statistic-value" id="totalParts">0</p>
+                        <p class="text-muted mb-0">Sistemde kayıtlı toplam yedek parça</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-car me-2"></i>Toplam Araç</h5>
+                        <p class="card-text statistic-value" id="totalVehicles">0</p>
+                        <p class="text-muted mb-0">Sistemde kayıtlı toplam araç</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-tools me-2"></i>Toplam Servis</h5>
+                        <p class="card-text statistic-value" id="totalServiceRecords">0</p>
+                        <p class="text-muted mb-0">Gerçekleştirilen toplam servis sayısı</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Düşük Stoklu Parçalar</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Parça Adı</th>
+                                        <th class="text-end">Mevcut</th>
+                                        <th class="text-end">Min. Stok</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lowStockParts">
+                                    <tr>
+                                        <td colspan="3" class="text-center py-4">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Yükleniyor...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-star me-2 text-warning"></i>En Çok Servis Alan Araçlar</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Araç</th>
+                                        <th class="text-end">Servis Sayısı</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="topVehicles">
+                                    <tr>
+                                        <td colspan="2" class="text-center py-4">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Yükleniyor...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Toplam Kayıtlı Parça</h5>
-                        <p class="card-text statistic-value" id="totalParts">0</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Toplam Kayıtlı Araç</h5>
-                        <p class="card-text statistic-value" id="totalVehicles">0</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Toplam Servis Kaydı</h5>
-                        <p class="card-text statistic-value" id="totalServiceRecords">0</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row mt-4">
             <div class="col-md-6 mb-4">
-                <div class="card">
+                <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Minimum Stok Seviyesinin Altındaki Parçalar</h5>
-                        <ul id="lowStockParts" class="list-group list-group-flush">
-                            <li class="list-group-item bg-transparent text-muted text-center">Yükleniyor...</li>
-                        </ul>
+                        <h5 class="card-title"><i class="fas fa-chart-pie me-2"></i>Parça Kategorileri</h5>
+                        <div class="chart-container">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 mb-4">
-                <div class="card">
+                <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">En Çok Servis Alan Araçlar</h5>
-                        <ul id="topVehicles" class="list-group list-group-flush">
-                            <li class="list-group-item bg-transparent text-muted text-center">Yükleniyor...</li>
-                        </ul>
+                        <h5 class="card-title"><i class="fas fa-chart-line me-2"></i>Son 6 Aylık Servisler</h5>
+                        <div class="chart-container">
+                            <canvas id="monthlyServiceChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 UstaStok V2. Tüm Hakları Saklıdır.</p>
+            <div class="row">
+                <div class="col-md-6 text-md-start">
+                    <p>&copy; 2025 UstaStok V2. Tüm Hakları Saklıdır.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">Versiyon 2.1.0</p>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Toplam Parça Sayısı
-            fetch('/api/spare_parts')
-                .then(response => response.json())
-                .then(data => {
-                    $('#totalParts').text(data.length);
-                })
-                .catch(error => {
-                    console.error('Error fetching total parts:', error);
-                    $('#totalParts').text('Hata');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toplam istatistikleri yükle
+            Promise.all([
+                fetch('/api/spare_parts').then(res => res.json()),
+                fetch('/api/vehicles').then(res => res.json()),
+                fetch('/api/service_records').then(res => res.json())
+            ]).then(([parts, vehicles, services]) => {
+                document.getElementById('totalParts').textContent = parts.length;
+                document.getElementById('totalVehicles').textContent = vehicles.length;
+                document.getElementById('totalServiceRecords').textContent = services.length;
+                
+                // Düşük stoklu parçaları yükle
+                loadLowStockParts(parts);
+                
+                // En çok servis alan araçları yükle
+                loadTopVehicles(services, vehicles);
+                
+                // Kategori grafiğini oluştur
+                createCategoryChart(parts);
+                
+                // Aylık servis grafiğini oluştur
+                createMonthlyServiceChart(services);
+            }).catch(error => {
+                console.error('Error loading statistics:', error);
+                document.getElementById('totalParts').textContent = 'Hata';
+                document.getElementById('totalVehicles').textContent = 'Hata';
+                document.getElementById('totalServiceRecords').textContent = 'Hata';
+                document.getElementById('lowStockParts').innerHTML = '<tr><td colspan="3" class="text-center text-danger">Veriler yüklenirken hata oluştu</td></tr>';
+                document.getElementById('topVehicles').innerHTML = '<tr><td colspan="2" class="text-center text-danger">Veriler yüklenirken hata oluştu</td></tr>';
+            });
+
+            function loadLowStockParts(parts) {
+                const lowStockParts = parts.filter(p => p.current_stock <= p.min_stock_level)
+                                          .sort((a, b) => a.current_stock - b.current_stock);
+                
+                const tableBody = document.getElementById('lowStockParts');
+                tableBody.innerHTML = '';
+                
+                if (lowStockParts.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">Düşük stoklu parça bulunamadı</td></tr>';
+                    return;
+                }
+                
+                lowStockParts.slice(0, 5).forEach(part => {
+                    const row = document.createElement('tr');
+                    row.className = part.current_stock === 0 ? 'table-danger' : 'table-warning';
+                    row.innerHTML = `
+                        <td>${part.part_name} (${part.part_code})</td>
+                        <td class="text-end">${part.current_stock}</td>
+                        <td class="text-end">${part.min_stock_level}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            function loadTopVehicles(services, vehicles) {
+                const vehicleServiceCounts = {};
+                services.forEach(record => {
+                    vehicleServiceCounts[record.vehicle_id] = (vehicleServiceCounts[record.vehicle_id] || 0) + 1;
                 });
 
-            // Toplam Araç Sayısı
-            fetch('/api/vehicles')
-                .then(response => response.json())
-                .then(data => {
-                    $('#totalVehicles').text(data.length);
-                })
-                .catch(error => {
-                    console.error('Error fetching total vehicles:', error);
-                    $('#totalVehicles').text('Hata');
+                const sortedVehicles = Object.entries(vehicleServiceCounts)
+                    .sort(([, a], [, b]) => b - a)
+                    .slice(0, 5); // İlk 5'i göster
+                
+                const tableBody = document.getElementById('topVehicles');
+                tableBody.innerHTML = '';
+                
+                if (sortedVehicles.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="2" class="text-center text-muted">Henüz servis kaydı yok</td></tr>';
+                    return;
+                }
+                
+                const vehicleMap = new Map(vehicles.map(v => [v.id, v]));
+                
+                sortedVehicles.forEach(([vehicleId, count]) => {
+                    const vehicle = vehicleMap.get(parseInt(vehicleId));
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${vehicle ? `${vehicle.license_plate} - ${vehicle.make} ${vehicle.model}` : `ID: ${vehicleId}`}</td>
+                        <td class="text-end">${count}</td>
+                    `;
+                    tableBody.appendChild(row);
                 });
-
-            // Toplam Servis Kaydı Sayısı
-            fetch('/api/service_records')
-                .then(response => response.json())
-                .then(data => {
-                    $('#totalServiceRecords').text(data.length);
-                })
-                .catch(error => {
-                    console.error('Error fetching total service records:', error);
-                    $('#totalServiceRecords').text('Hata');
+            }
+            
+            function createCategoryChart(parts) {
+                const categories = {};
+                parts.forEach(part => {
+                    const category = part.category || 'Belirtilmemiş';
+                    categories[category] = (categories[category] || 0) + 1;
                 });
-
-            // Minimum Stok Seviyesinin Altındaki Parçalar
-            fetch('/api/spare_parts')
-                .then(response => response.json())
-                .then(data => {
-                    const lowStockPartsList = $('#lowStockParts');
-                    lowStockPartsList.empty();
-                    const lowStock = data.filter(p => p.current_stock <= p.min_stock_level);
-                    if (lowStock.length === 0) {
-                        lowStockPartsList.append('<li class="list-group-item bg-transparent text-muted">Minimum stok seviyesinin altında parça yok.</li>');
-                        return;
+                
+                const ctx = document.getElementById('categoryChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: Object.keys(categories),
+                        datasets: [{
+                            data: Object.values(categories),
+                            backgroundColor: [
+                                '#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1',
+                                '#fd7e14', '#20c997', '#6610f2', '#e83e8c', '#17a2b8'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    color: '#eee'
+                                }
+                            }
+                        }
                     }
-                    lowStock.forEach(part => {
-                        lowStockPartsList.append(`<li class="list-group-item bg-transparent text-danger"><strong>${part.part_name}</strong> (${part.part_code}): Mevcut Stok ${part.current_stock} / Min. Stok ${part.min_stock_level}</li>`);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching low stock parts:', error);
-                    $('#lowStockParts').html('<li class="list-group-item bg-transparent text-danger">Parçalar yüklenirken hata oluştu.</li>');
                 });
-
-            // En Çok Servis Alan Araçlar (Basit Versiyon: Sadece Sayım)
-            fetch('/api/service_records')
-                .then(response => response.json())
-                .then(serviceRecords => {
-                    const vehicleServiceCounts = {};
-                    serviceRecords.forEach(record => {
-                        vehicleServiceCounts[record.vehicle_id] = (vehicleServiceCounts[record.vehicle_id] || 0) + 1;
+            }
+            
+            function createMonthlyServiceChart(services) {
+                const months = [];
+                const currentDate = new Date();
+                
+                // Son 6 ayı hazırla
+                for (let i = 5; i >= 0; i--) {
+                    const date = new Date(currentDate);
+                    date.setMonth(date.getMonth() - i);
+                    months.push({
+                        name: date.toLocaleString('tr-TR', { month: 'long' }),
+                        year: date.getFullYear(),
+                        count: 0
                     });
-
-                    const sortedVehicles = Object.entries(vehicleServiceCounts).sort(([, a], [, b]) => b - a);
-                    const topVehiclesList = $('#topVehicles');
-                    topVehiclesList.empty();
-
-                    if (sortedVehicles.length === 0) {
-                        topVehiclesList.append('<li class="list-group-item bg-transparent text-muted">Henüz servis kaydı yok.</li>');
-                        return;
+                }
+                
+                // Servisleri say
+                services.forEach(service => {
+                    const serviceDate = new Date(service.service_date || service.created_at);
+                    const monthIndex = 5 - (currentDate.getMonth() - serviceDate.getMonth() + 
+                                          (currentDate.getFullYear() - serviceDate.getFullYear()) * 12);
+                    
+                    if (monthIndex >= 0 && monthIndex < 6) {
+                        months[monthIndex].count++;
                     }
-
-                    // Vehicle ID'lerini plaka ve modelle eşleştirmek için tüm araçları getir
-                    fetch('/api/vehicles')
-                        .then(response => response.json())
-                        .then(vehicles => {
-                            const vehicleMap = new Map(vehicles.map(v => [v.id, v]));
-
-                            sortedVehicles.slice(0, 5).forEach(([vehicleId, count]) => { // İlk 5'i göster
-                                const vehicleInfo = vehicleMap.get(parseInt(vehicleId));
-                                const displayText = vehicleInfo
-                                    ? `${vehicleInfo.license_plate} (${vehicleInfo.make} ${vehicleInfo.model}) - ${count} Servis`
-                                    : `ID ${vehicleId} (Bilinmeyen Araç) - ${count} Servis`;
-                                topVehiclesList.append(`<li class="list-group-item bg-transparent">${displayText}</li>`);
-                            });
-                        })
-                        .catch(error => {
-                            console.error('Error fetching vehicles for top list:', error);
-                            topVehiclesList.append('<li class="list-group-item bg-transparent text-danger">Araç bilgileri yüklenirken hata oluştu.</li>');
-                        });
-                })
-                .catch(error => {
-                    console.error('Error fetching top vehicles:', error);
-                    $('#topVehicles').html('<li class="list-group-item bg-transparent text-danger">İstatistikler yüklenirken hata oluştu.</li>');
                 });
+                
+                const ctx = document.getElementById('monthlyServiceChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: months.map(m => `${m.name} ${m.year}`),
+                        datasets: [{
+                            label: 'Servis Sayısı',
+                            data: months.map(m => m.count),
+                            backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                            borderColor: 'rgba(0, 123, 255, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#eee',
+                                    stepSize: 1
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#eee'
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#eee'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         });
     </script>
 </body>

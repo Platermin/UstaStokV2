@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stok Listesi - UstaStok V2</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #eee;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: #222;
+            border-bottom: 2px solid #555;
+        }
+        .navbar-brand, .nav-link {
+            color: #eee !important;
+        }
+        .nav-link:hover {
+            color: #007bff !important;
+        }
+        .container {
+            flex: 1;
+            background-color: #444;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            max-width: 1200px; /* Geniş ekranlar için */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            color: #fff;
+        }
+        .table {
+            color: #eee;
+            background-color: #555;
+            border: 1px solid #666;
+        }
+        .table thead th {
+            background-color: #666;
+            border-bottom: 2px solid #777;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #666;
+        }
+        .form-control {
+            background-color: #555;
+            color: #eee;
+            border: 1px solid #666;
+        }
+        .form-control:focus {
+            background-color: #666;
+            color: #fff;
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .footer {
+            background-color: #222;
+            color: #bbb;
+            padding: 15px 0;
+            text-align: center;
+            border-top: 2px solid #555;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/">UstaStok V2</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/stok-ekle.html">Stok Ekle</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/stok-listesi.html">Stok Listesi <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/stok-duzenle.html">Stok Düzenle</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/arac-kayit.html">Araç Kayıt</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/arac-gecmisi.html">Araç Geçmişi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/istatistikler.html">İstatistikler</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/kullanicilar.html">Kullanıcı Yönetimi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ayarlar.html">Ayarlar</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="mb-4">Yedek Parça Stok Listesi</h1>
+
+        <div class="form-group">
+            <input type="text" class="form-control" id="searchInput" placeholder="Parça Kodu, Adı veya Marka ile ara...">
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Parça Kodu</th>
+                        <th>Parça Adı</th>
+                        <th>Marka</th>
+                        <th>Model Uyumluluğu</th>
+                        <th>Kategori</th>
+                        <th>Alış Fiyatı</th>
+                        <th>Satış Fiyatı</th>
+                        <th>Mevcut Stok</th>
+                        <th>Min. Stok</th>
+                        <th>Tedarikçi</th>
+                        <th>Konum</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody id="partsTableBody">
+                    <tr><td colspan="13" class="text-center">Yükleniyor...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 UstaStok V2. Tüm Hakları Saklıdır.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function fetchParts(searchQuery = '') {
+                $('#partsTableBody').html('<tr><td colspan="13" class="text-center">Yükleniyor...</td></tr>');
+                fetch(`/api/spare_parts?search=${encodeURIComponent(searchQuery)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = $('#partsTableBody');
+                        tableBody.empty();
+                        if (data.length === 0) {
+                            tableBody.append('<tr><td colspan="13" class="text-center">Hiç yedek parça bulunamadı.</td></tr>');
+                            return;
+                        }
+                        data.forEach(part => {
+                            const row = `
+                                <tr>
+                                    <td>${part.id}</td>
+                                    <td>${part.part_code}</td>
+                                    <td>${part.part_name}</td>
+                                    <td>${part.brand || ''}</td>
+                                    <td>${part.model_compatibility || ''}</td>
+                                    <td>${part.category || ''}</td>
+                                    <td>${(part.purchase_price || 0).toFixed(2)}</td>
+                                    <td>${(part.sale_price || 0).toFixed(2)}</td>
+                                    <td>${part.current_stock}</td>
+                                    <td>${part.min_stock_level}</td>
+                                    <td>${part.supplier || ''}</td>
+                                    <td>${part.location || ''}</td>
+                                    <td>
+                                        <a href="/stok-duzenle.html?id=${part.id}" class="btn btn-primary btn-sm">Düzenle</a>
+                                    </td>
+                                </tr>
+                            `;
+                            tableBody.append(row);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching parts:', error);
+                        $('#partsTableBody').html('<tr><td colspan="13" class="text-center text-danger">Parçalar yüklenirken bir hata oluştu.</td></tr>');
+                    });
+            }
+
+            // Initial fetch
+            fetchParts();
+
+            // Search functionality
+            $('#searchInput').on('keyup', function() {
+                const query = $(this).val();
+                fetchParts(query);
+            });
+        });
+    </script>
+</body>
+</html>

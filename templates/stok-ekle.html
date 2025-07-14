@@ -3,235 +3,410 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Stok Ekle - UstaStok V2</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --bg-dark: #222;
+            --bg-medium: #333;
+            --bg-light: #444;
+            --text-light: #eee;
+            --text-muted: #bbb;
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --border-color: #555;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #333;
-            color: #eee;
-            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-medium);
+            color: var(--text-light);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
+        
         .navbar {
-            background-color: #222;
-            border-bottom: 2px solid #555;
+            background-color: var(--bg-dark);
+            border-bottom: 2px solid var(--border-color);
         }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
         .navbar-brand, .nav-link {
-            color: #eee !important;
+            color: var(--text-light) !important;
         }
-        .nav-link:hover {
-            color: #007bff !important;
+        
+        .nav-link:hover, .nav-link:focus {
+            color: var(--primary-color) !important;
         }
+        
         .container {
             flex: 1;
-            background-color: #444;
-            padding: 20px;
+            background-color: var(--bg-light);
+            padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            margin-top: 20px;
-            margin-bottom: 20px;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
         }
+        
         h1, h2, h3, h4, h5, h6 {
-            color: #fff;
+            color: white;
         }
-        .form-control, .btn {
+        
+        .form-control, .form-select, .btn {
             border-radius: 5px;
+            transition: all 0.3s ease;
         }
+        
         .form-group label {
-            color: #ccc;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
         }
-        .form-control {
-            background-color: #555;
-            color: #eee;
-            border: 1px solid #666;
+        
+        .form-control, .form-select {
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
         }
-        .form-control:focus {
-            background-color: #666;
-            color: #fff;
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        
+        .form-control:focus, .form-select:focus {
+            background-color: var(--bg-medium);
+            color: var(--text-light);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
+        
         .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
         }
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
+        
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+            transform: translateY(-2px);
         }
+        
+        .alert {
+            border: none;
+            border-left: 4px solid transparent;
+        }
+        
         .alert-success {
-            background-color: #28a745;
+            background-color: rgba(40, 167, 69, 0.2);
             color: white;
+            border-left-color: var(--success-color);
         }
+        
         .alert-danger {
-            background-color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.2);
             color: white;
+            border-left-color: var(--danger-color);
         }
+        
         .footer {
-            background-color: #222;
-            color: #bbb;
-            padding: 15px 0;
+            background-color: var(--bg-dark);
+            color: var(--text-muted);
+            padding: 1rem 0;
             text-align: center;
-            border-top: 2px solid #555;
+            border-top: 2px solid var(--border-color);
             margin-top: auto;
+        }
+        
+        .required-field::after {
+            content: " *";
+            color: var(--danger-color);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                margin-top: 1rem;
+            }
+            
+            .form-control, .form-select {
+                padding: 0.5rem 0.75rem;
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg">
-        <a class="navbar-brand" href="/">UstaStok V2</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/stok-ekle.html">Stok Ekle <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/stok-listesi.html">Stok Listesi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/stok-duzenle.html">Stok Düzenle</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/arac-kayit.html">Araç Kayıt</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/arac-gecmisi.html">Araç Geçmişi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/istatistikler.html">İstatistikler</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/kullanicilar.html">Kullanıcı Yönetimi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/ayarlar.html">Ayarlar</a>
-                </li>
-            </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-car me-2"></i>UstaStok V2
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/stok-ekle.html"><i class="fas fa-plus-circle me-1"></i>Stok Ekle</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stok-listesi.html"><i class="fas fa-list me-1"></i>Stok Listesi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stok-duzenle.html"><i class="fas fa-edit me-1"></i>Stok Düzenle</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/arac-kayit.html"><i class="fas fa-car-side me-1"></i>Araç Kayıt</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/arac-gecmisi.html"><i class="fas fa-history me-1"></i>Araç Geçmişi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/istatistikler.html"><i class="fas fa-chart-bar me-1"></i>İstatistikler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/kullanicilar.html"><i class="fas fa-users me-1"></i>Kullanıcılar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ayarlar.html"><i class="fas fa-cog me-1"></i>Ayarlar</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
     <div class="container">
-        <h1 class="mb-4">Yeni Yedek Parça Ekle</h1>
-        <div id="message" class="alert d-none" role="alert"></div>
-        <form id="addPartForm">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="partCode">Parça Kodu*</label>
-                    <input type="text" class="form-control" id="partCode" required>
+        <h1 class="mb-4"><i class="fas fa-box-open me-2"></i>Yeni Yedek Parça Ekle</h1>
+        <div id="message" class="alert d-none mb-4" role="alert"></div>
+        
+        <form id="addPartForm" novalidate>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-dark">
+                            <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Temel Bilgiler</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="partCode" class="form-label required-field">Parça Kodu</label>
+                                <input type="text" class="form-control" id="partCode" required>
+                                <div class="invalid-feedback">Lütfen geçerli bir parça kodu giriniz.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="partName" class="form-label required-field">Parça Adı</label>
+                                <input type="text" class="form-control" id="partName" required>
+                                <div class="invalid-feedback">Lütfen parça adını giriniz.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="brand" class="form-label">Marka</label>
+                                <input type="text" class="form-control" id="brand">
+                            </div>
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Kategori</label>
+                                <select class="form-select" id="category">
+                                    <option value="">Seçiniz</option>
+                                    <option value="Motor">Motor</option>
+                                    <option value="Fren">Fren</option>
+                                    <option value="Süspansiyon">Süspansiyon</option>
+                                    <option value="Elektrik">Elektrik</option>
+                                    <option value="Kaporta">Kaporta</option>
+                                    <option value="İç Donanım">İç Donanım</option>
+                                    <option value="Dış Donanım">Dış Donanım</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="partName">Parça Adı*</label>
-                    <input type="text" class="form-control" id="partName" required>
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-dark">
+                            <h5 class="mb-0"><i class="fas fa-car me-2"></i>Uyumluluk Bilgileri</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="modelCompatibility" class="form-label">Model Uyumluluğu</label>
+                                <input type="text" class="form-control" id="modelCompatibility" placeholder="Örn: 2015-2020 Ford Focus">
+                            </div>
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Depo Konumu</label>
+                                <input type="text" class="form-control" id="location" placeholder="Örn: Raf A-12">
+                            </div>
+                            <div class="mb-3">
+                                <label for="supplier" class="form-label">Tedarikçi</label>
+                                <select class="form-select" id="supplier">
+                                    <option value="">Seçiniz</option>
+                                    <option value="Bosch">Bosch</option>
+                                    <option value="Valeo">Valeo</option>
+                                    <option value="ZF">ZF</option>
+                                    <option value="Mann-Filter">Mann-Filter</option>
+                                    <option value="Brembo">Brembo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="brand">Marka</label>
-                    <input type="text" class="form-control" id="brand">
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-dark">
+                            <h5 class="mb-0"><i class="fas fa-coins me-2"></i>Fiyat Bilgileri</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="purchasePrice" class="form-label">Alış Fiyatı (₺)</label>
+                                    <div class="input-group">
+                                        <input type="number" step="0.01" class="form-control" id="purchasePrice">
+                                        <span class="input-group-text">₺</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="salePrice" class="form-label">Satış Fiyatı (₺)</label>
+                                    <div class="input-group">
+                                        <input type="number" step="0.01" class="form-control" id="salePrice">
+                                        <span class="input-group-text">₺</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="modelCompatibility">Model Uyumluluğu</label>
-                    <input type="text" class="form-control" id="modelCompatibility">
+                
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-dark">
+                            <h5 class="mb-0"><i class="fas fa-boxes me-2"></i>Stok Bilgileri</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="currentStock" class="form-label">Mevcut Stok</label>
+                                    <input type="number" class="form-control" id="currentStock" value="0" min="0">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="minStockLevel" class="form-label">Minimum Stok Seviyesi</label>
+                                    <input type="number" class="form-control" id="minStockLevel" value="0" min="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="category">Kategori</label>
-                    <input type="text" class="form-control" id="category">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="supplier">Tedarikçi</label>
-                    <input type="text" class="form-control" id="supplier">
-                </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="reset" class="btn btn-secondary me-md-2">
+                    <i class="fas fa-undo me-1"></i>Temizle
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Parçayı Kaydet
+                </button>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="purchasePrice">Alış Fiyatı</label>
-                    <input type="number" step="0.01" class="form-control" id="purchasePrice">
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="salePrice">Satış Fiyatı</label>
-                    <input type="number" step="0.01" class="form-control" id="salePrice">
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="location">Konum</label>
-                    <input type="text" class="form-control" id="location">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="currentStock">Mevcut Stok</label>
-                    <input type="number" class="form-control" id="currentStock" value="0">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="minStockLevel">Minimum Stok Seviyesi</label>
-                    <input type="number" class="form-control" id="minStockLevel" value="0">
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Parça Ekle</button>
         </form>
     </div>
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 UstaStok V2. Tüm Hakları Saklıdır.</p>
+            <div class="row">
+                <div class="col-md-6 text-md-start">
+                    <p>&copy; 2025 UstaStok V2. Tüm Hakları Saklıdır.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">Versiyon 2.1.0</p>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#addPartForm').on('submit', function(e) {
-                e.preventDefault();
-
-                const messageDiv = $('#message');
-                messageDiv.removeClass('alert-success alert-danger').addClass('d-none').text('');
-
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('addPartForm');
+            const messageDiv = document.getElementById('message');
+            
+            // Form validation
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                if (!form.checkValidity()) {
+                    form.classList.add('was-validated');
+                    return;
+                }
+                
+                // Form data preparation
                 const partData = {
-                    part_code: $('#partCode').val(),
-                    part_name: $('#partName').val(),
-                    brand: $('#brand').val(),
-                    model_compatibility: $('#modelCompatibility').val(),
-                    category: $('#category').val(),
-                    purchase_price: parseFloat($('#purchasePrice').val()) || 0,
-                    sale_price: parseFloat($('#salePrice').val()) || 0,
-                    current_stock: parseInt($('#currentStock').val()) || 0,
-                    min_stock_level: parseInt($('#minStockLevel').val()) || 0,
-                    supplier: $('#supplier').val(),
-                    location: $('#location').val()
+                    part_code: document.getElementById('partCode').value,
+                    part_name: document.getElementById('partName').value,
+                    brand: document.getElementById('brand').value,
+                    model_compatibility: document.getElementById('modelCompatibility').value,
+                    category: document.getElementById('category').value,
+                    purchase_price: parseFloat(document.getElementById('purchasePrice').value) || 0,
+                    sale_price: parseFloat(document.getElementById('salePrice').value) || 0,
+                    current_stock: parseInt(document.getElementById('currentStock').value) || 0,
+                    min_stock_level: parseInt(document.getElementById('minStockLevel').value) || 0,
+                    supplier: document.getElementById('supplier').value,
+                    location: document.getElementById('location').value
                 };
-
+                
+                // Reset message
+                messageDiv.className = 'alert d-none';
+                messageDiv.textContent = '';
+                
+                // API call
                 fetch('/api/spare_parts', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(partData)
                 })
-                .then(response => response.json().then(data => ({ status: response.status, body: data })))
-                .then(res => {
-                    if (res.status === 201) {
-                        messageDiv.text(res.body.message).removeClass('d-none').addClass('alert-success');
-                        $('#addPartForm')[0].reset(); // Formu sıfırla
-                        $('#currentStock').val(0); // Varsayılan değeri tekrar ayarla
-                        $('#minStockLevel').val(0); // Varsayılan değeri tekrar ayarla
+                .then(async response => {
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        showMessage(data.message || 'Parça başarıyla eklendi!', 'success');
+                        form.reset();
+                        form.classList.remove('was-validated');
                     } else {
-                        messageDiv.text(res.body.message).removeClass('d-none').addClass('alert-danger');
+                        throw new Error(data.message || 'Bir hata oluştu');
                     }
                 })
                 .catch(error => {
+                    showMessage(error.message || 'Parça eklenirken bir hata oluştu', 'danger');
                     console.error('Error:', error);
-                    messageDiv.text('Bir hata oluştu: ' + error.message).removeClass('d-none').addClass('alert-danger');
                 });
             });
+            
+            function showMessage(text, type) {
+                messageDiv.textContent = text;
+                messageDiv.className = `alert alert-${type} show`;
+                setTimeout(() => {
+                    messageDiv.classList.add('show');
+                }, 100);
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    messageDiv.classList.remove('show');
+                    setTimeout(() => {
+                        messageDiv.className = 'alert d-none';
+                    }, 300);
+                }, 5000);
+            }
         });
     </script>
 </body>
